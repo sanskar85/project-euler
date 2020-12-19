@@ -38,5 +38,4 @@ public static final int num1=3,num2=5,max_number=20;
  * Output
  * 266333
  * 
- *
  * */
