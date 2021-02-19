@@ -47,9 +47,17 @@ void loop() {
 
 }
 
+void showError(){  
+  for(int i=0;i<3;i++){    
+    analogWrite(alert, 255);
+    delay(100);
+    analogWrite(alert, 0);   
+  }
+}
+
 void printStartingStatement(){  
-   lcd.createChar(0,smiley);
-   lcd.createChar(1,heart);
+   lcd.createChar(1,smiley);
+   lcd.createChar(2,heart);
   lcd.noCursor();
   lcd.setCursor(0,0);  lcd.print("^^^Welcome TO^^^");  lcd.setCursor(0,1);  lcd.print("******ARIA******");
   delay(1000);  
@@ -57,8 +65,8 @@ void printStartingStatement(){
   lcd.setCursor(0,0);  lcd.print("ADVANCE RESEARCH");  lcd.setCursor(0,1);  lcd.print(" IN AGRICULTURE ");
   delay(1000);
   lcd.clear();
-  lcd.setCursor(0,0);  lcd.print(".MADE IN INDIA "); lcd.write(0);
-  lcd.setCursor(0,1);  lcd.print("....WITH LOVE ");  lcd.write(1);
+  lcd.setCursor(0,0);  lcd.print(".MADE IN INDIA "); lcd.write(1);
+  lcd.setCursor(0,1);  lcd.print("....WITH LOVE ");  lcd.write(2);
   delay(1500);
   lcd.clear();
 }
