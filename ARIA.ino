@@ -1,4 +1,10 @@
 #include <LiquidCrystal.h>
+#include <dht.h>
+
+
+#define dht_pin A0
+dht DHT;
+
 
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 int soil_moisture_in=A0;
@@ -23,6 +29,16 @@ void setup() {
 }
 
 void loop() {
+  DHT.read11(dht_pin);
+  
+    Serial.print("Current humidity = ");
+    Serial.print(DHT.humidity);
+    Serial.print("%  ");
+    Serial.print("temperature = ");
+    Serial.print(DHT.temperature); 
+    Serial.println("C  ");
+    
+    delay(5000);
   
 }
 
@@ -45,8 +61,7 @@ void printStartingStatement(){
   lcd.setCursor(0,0);  lcd.print("ADVANCE RESEARCH");  lcd.setCursor(0,1);  lcd.print(" IN AGRICULTURE ");
   delay(1000);
   lcd.clear();
-  lcd.setCursor(0,0);  lcd.print(".MADE IN INDIA "); lcd.write(1);
-  lcd.setCursor(0,1);  lcd.print("....WITH LOVE ");  lcd.write(2);
+  lcd.setCursor(0,0);  lcd.print(".MADE IN INDIA "); lcd.write(1);  lcd.setCursor(0,1);  lcd.print("....WITH LOVE ");  lcd.write(2);
   delay(1500);
   lcd.clear();
 }
