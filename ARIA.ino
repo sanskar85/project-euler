@@ -35,7 +35,7 @@ void setup() {
   pinMode(alert,OUTPUT);
   Serial.begin(9600);
   lcd.begin(16,2);
-  analogWrite(alert, 255);
+  showError();
   
  // printStartingStatement();
   
