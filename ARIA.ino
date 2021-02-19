@@ -5,8 +5,6 @@ int soil_moisture_in=A0;
 int soil_moisture_value;
 int soil_moisture_limit=300;
 int alert = 13;
-int buzzer1 = 8;
-int buzzer2 = 9;
 
 
 // custom characters generated for matrix display we are using
@@ -31,12 +29,8 @@ void loop() {
 void showError(){  
     for(int i=0;i<3;i++){
       digitalWrite(alert, HIGH);
-      digitalWrite(buzzer1, HIGH);
-      digitalWrite(buzzer2, HIGH);
       delay(100);
       digitalWrite(alert, LOW); 
-      digitalWrite(buzzer1, LOW);
-      digitalWrite(buzzer2, LOW);
       delay(100);
     }
 }
