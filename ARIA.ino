@@ -10,27 +10,9 @@ int buzzer2 = 9;
 
 
 // custom characters generated for matrix display we are using
-byte heart[] = {
-  B00000,
-  B01010,
-  B11111,
-  B11111,
-  B11111,
-  B01110,
-  B00100,
-  B00000
-};
+byte heart[] = {  B00000,  B01010,  B11111,  B11111,  B11111,  B01110,  B00100,  B00000 };
 
-byte smiley[] = {
-  B00000,
-  B00000,
-  B01010,
-  B00000,
-  B00000,
-  B10001,
-  B01110,
-  B00000
-};
+byte smiley[] = {  B00000,  B00000,  B01010,  B00000,  B00000,  B10001,  B01110,  B00000  };
 
 void setup() {
   pinMode(alert,OUTPUT);
@@ -47,16 +29,16 @@ void loop() {
 }
 
 void showError(){  
-  for(int i=0;i<3;i++){
-    digitalWrite(alert, HIGH);
-    digitalWrite(buzzer1, HIGH);
-    digitalWrite(buzzer2, HIGH);
-    delay(100);
-    digitalWrite(alert, LOW); 
-    digitalWrite(buzzer1, LOW);
-    digitalWrite(buzzer2, LOW);
-    delay(100);
-  }
+    for(int i=0;i<3;i++){
+      digitalWrite(alert, HIGH);
+      digitalWrite(buzzer1, HIGH);
+      digitalWrite(buzzer2, HIGH);
+      delay(100);
+      digitalWrite(alert, LOW); 
+      digitalWrite(buzzer1, LOW);
+      digitalWrite(buzzer2, LOW);
+      delay(100);
+    }
 }
 
 void printStartingStatement(){  
