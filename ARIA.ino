@@ -4,8 +4,7 @@ LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 int soil_moisture_in=A0;
 int soil_moisture_value;
 int soil_moisture_limit=300;
-int BUZZER =13;
-int alert = 10;
+int alert = 13;
 
 
 // custom characters generated for matrix display we are using
@@ -42,16 +41,18 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  showError();
+  digitalWrite(alert, HIGH);   // turn the LED on (HIGH is the voltage level)
+  delay(1000);               // wait for a second
+  digitalWrite(alert, LOW);    // turn the LED off by making the voltage LOW
+  delay(1000); 
 }
 
 void showError(){  
-  for(int i=0;i<3;i++){    
-    analogWrite(alert, 255);
+  for(int i=0;i<3;i++){
+    digitalWrite(alert, HIGH);
     delay(500);
-    analogWrite(alert, 0); 
-    delay(500);  
+    digitalWrite(alert, LOW); 
+    delay(500);
   }
 }
 
