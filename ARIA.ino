@@ -5,6 +5,8 @@ int soil_moisture_in=A0;
 int soil_moisture_value;
 int soil_moisture_limit=300;
 int alert = 13;
+int buzzer1 = 8;
+int buzzer2 = 9;
 
 
 // custom characters generated for matrix display we are using
@@ -41,18 +43,19 @@ void setup() {
 }
 
 void loop() {
-  digitalWrite(alert, HIGH);   // turn the LED on (HIGH is the voltage level)
-  delay(1000);               // wait for a second
-  digitalWrite(alert, LOW);    // turn the LED off by making the voltage LOW
-  delay(1000); 
+  
 }
 
 void showError(){  
   for(int i=0;i<3;i++){
     digitalWrite(alert, HIGH);
-    delay(500);
+    digitalWrite(buzzer1, HIGH);
+    digitalWrite(buzzer2, HIGH);
+    delay(100);
     digitalWrite(alert, LOW); 
-    delay(500);
+    digitalWrite(buzzer1, LOW);
+    digitalWrite(buzzer2, LOW);
+    delay(100);
   }
 }
 
