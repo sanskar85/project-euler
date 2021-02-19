@@ -35,7 +35,6 @@ void setup() {
   pinMode(alert,OUTPUT);
   Serial.begin(9600);
   lcd.begin(16,2);
-  showError();
   
  // printStartingStatement();
   
@@ -44,14 +43,15 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-
+  showError();
 }
 
 void showError(){  
   for(int i=0;i<3;i++){    
     analogWrite(alert, 255);
-    delay(100);
-    analogWrite(alert, 0);   
+    delay(500);
+    analogWrite(alert, 0); 
+    delay(500);  
   }
 }
 
