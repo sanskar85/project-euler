@@ -6,18 +6,18 @@ dht DHT;
 
 
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
-int alert = 13;     // for alert output pin
-int rain_detect_in=A1; //Rain sensor input pin
-int smoke_detect_in=A2; //Smoke sensor input pin
-int soil_moist_detect_in=A3; //Moisture sensor input pin
-int fire_detect_in=6; //Fire sensor input pin
+const int alert = 13;     // for alert output pin
+const int rain_detect_in=A1; //Rain sensor input pin
+const int smoke_detect_in=A2; //Smoke sensor input pin
+const int soil_moist_detect_in=A3; //Moisture sensor input pin
+const int fire_detect_in=6; //Fire sensor input pin
 
 
 
 const int MIN = 0;     // sensor minimum
 const int MAX = 1024;
 const int smokeThreshold = 600;
-const int moistureThreshold = 500;
+const int moistureThreshold = 650;
 const int delayCount=10;
 int fireStatusCounter=0;
 int smokeStatusCounter=0;
@@ -56,7 +56,7 @@ void detectMoisture(){
     Serial.print("Moisture Value : "); Serial.println(moisture);    
     lcd.clear();
     lcd.setCursor(0,0);  
-    if(moisture>950){    lcd.print(".PLEASE INSTALL.");  lcd.setCursor(0,1); lcd.print("DEVICE PROPERLY.");
+    if(moisture>900){    lcd.print(".PLEASE INSTALL.");  lcd.setCursor(0,1); lcd.print("DEVICE PROPERLY.");
         Serial.println("SOIL MOISTURE SENSOR NOT PLANTED");        
     }else if(moisture>moistureThreshold){
         lcd.print("MOISTURE TOO");  
@@ -64,8 +64,8 @@ void detectMoisture(){
         Serial.println("Soil moisture too low");        
     }else{
         lcd.print("MOISTURE");  
-        lcd.setCursor(0,1); lcd.print("PERFECT"); lcd.setCursor(12,1); lcd.print(String((MAX-moisture)/10));
-        Serial.println("Soil moisture too low");  
+        lcd.setCursor(0,1); lcd.print("PERFECT"); lcd.setCursor(12,1); lcd.print(String((MAX-moisture)/10)+String("%"));
+        Serial.println("Soil moisture Perfect");  
     }
 
 
