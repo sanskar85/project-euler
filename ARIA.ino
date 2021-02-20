@@ -2,13 +2,13 @@
 #include <Adafruit_Sensor.h>
 #include "dht.h"
 #define dht_in A0 
-#define rain_detect_in=A1;
 
 dht DHT;
 
 
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 int alert = 13;
+int rain_detect_in=A1;
 const int rainMin = 0;     // sensor minimum
 const int rainMax = 1024;
 
@@ -42,9 +42,9 @@ void detectRain(){
       int rain_mapped= map(rainReading, rainMin, rainMax, 0, 3);
       lcd.clear();
       lcd.setCursor(0,0);
-      Serial.println("Rain possiblility "+(rainMax-rain_mapped));      
+      Serial.print("Rain possiblility "); Serial.print((rainMax-rain_mapped));     
        switch (rain_mapped) { 
-         case 0:     lcd.print("......HEAVY....." ); lcd.setCursor(0,1); lcd.print(".....RAIN....." );  break;
+         case 0:     lcd.print("......HEAVY....." ); lcd.setCursor(0,1); lcd.print(".....RAIN....." ); showAlert(); break;
          case 1:    lcd.print("......MIGHT....." ); lcd.setCursor(0,1); lcd.print(".....RAIN....." ); showAlert(); break;
          case 2:    lcd.print("......NOT......" ); lcd.setCursor(0,1); lcd.print("...RAINING...." );  break;
         }
