@@ -16,8 +16,12 @@ const int fire_detect_in=6; //Fire sensor input pin
 
 const int MIN = 0;                  // MINIMUM VALUE OF SENSORS
 const int MAX = 1024;               // MAXIMUM VALUE OF SENSORS
-const int smokeThreshold = 800;     // MINIMUM VALUE FOR SMOKE DETECTION
-const int moistureThreshold = 450;  // MINIMUM VALUE OF SOIL MOISTURE TO BE PERFECT
+const int smokeThreshold = 600;     // MINIMUM VALUE FOR SMOKE DETECTION
+const int moistureThreshold = 650;  // MINIMUM VALUE OF SOIL MOISTURE TO BE PERFECT
+const int delayCount=10;            // SOME SENSORS TO SHOW REPEATEDLY
+
+int fireStatusCounter=0;            
+int smokeStatusCounter=0;
 
 
 // custom characters generated for matrix display we are using
@@ -54,13 +58,11 @@ void detectMoisture(){
     Serial.print("Moisture Value : "); Serial.println(moisture);    
     lcd.clear();
     lcd.setCursor(0,0);  
-    if(moisture==MAX){    lcd.print(".PLEASE INSTALL.");  lcd.setCursor(0,1); lcd.print("DEVICE PROPERLY.");  
-    showAlert();
+    if(moisture>900){    lcd.print(".PLEASE INSTALL.");  lcd.setCursor(0,1); lcd.print("DEVICE PROPERLY.");
         Serial.println("SOIL MOISTURE SENSOR NOT PLANTED");        
     }else if(moisture>moistureThreshold){
         lcd.print("MOISTURE TOO");  
-        lcd.setCursor(0,1); lcd.print(" LOW "); lcd.setCursor(12,1); lcd.print(String((MAX-moisture)/10));    
-        showAlert();
+        lcd.setCursor(0,1); lcd.print(" LOW "); lcd.setCursor(12,1); lcd.print(String((MAX-moisture)/10));
         Serial.println("Soil moisture too low");        
     }else{
         lcd.print("MOISTURE");  
@@ -76,12 +78,12 @@ void detectSmoke(){
     Serial.print("Smoke sensor value");  Serial.println(smokeValue);
     if( smokeValue>smokeThreshold){
         lcd.clear();
-        lcd.setCursor(0,0);      lcd.print("....BE ALERT....");  lcd.setCursor(0,1); lcd.print(".SMOKE DETECTED."); s
-        howAlert();
+        lcd.setCursor(0,0);      lcd.print("....BE ALERT....");  lcd.setCursor(0,1); lcd.print(".SMOKE DETECTED.");
         Serial.println("Fire ALert");
-    }else{
+    }else if(smokeStatusCounter++>delayCount){
         lcd.clear();
         lcd.setCursor(0,0);      lcd.print("....NO SMOKE....");  lcd.setCursor(0,1); lcd.print("....DETECTED....");
+        smokeStatusCounter=0;
     } 
 }
 
@@ -96,12 +98,14 @@ void detectFire(){
           delay(3000);
       }
       else {
-            
-          lcd.clear();
-          lcd.setCursor(0,0); 
-          lcd.print("     NO FIRE    ");       
-          delay(3000);
-          Serial.println("No Fire");  
+            if(fireStatusCounter++>delayCount){
+              lcd.clear();
+              lcd.setCursor(0,0); 
+              lcd.print("     NO FIRE    "); 
+              fireStatusCounter=0;          
+              delay(3000);
+            }
+            Serial.println("No Fire");  
       }
   
 }
