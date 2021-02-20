@@ -11,8 +11,11 @@ int rain_detect_in=A1; //Rain sensor input pin
 int fire_detect_in=6; //Fire sensor input pin
 
 
+
 const int MIN = 0;     // sensor minimum
 const int MAX = 1024;
+const int fireStatusDelay=10;
+int fireStatusCounter=0;
 
 
 // custom characters generated for matrix display we are using
@@ -39,14 +42,23 @@ void loop(){
 }// end loop()
 
 void detectFire(){
-    Flame = digitalRead(flamePin);
-      if (Flame== LOW)
-      {
-          Serial.println("Fire!!!");  showAlert();
+      int Flame = digitalRead(fire_detect_in);
+      lcd.clear();
+      lcd.setCursor(0,0);
+       if (Flame== HIGH){
+          lcd.print("!!!!! FIRE !!!!!"); lcd.setCursor(0,1);  lcd.print("!!!!! ALERT !!!!");
+          Serial.println("Fire!!!");  
+          showAlert();
+          delay(3000);
       }
-      else
-      {
-        Serial.println("No worries");
+      else {
+            if(fireStatusCounter++>fireStatusDelay){
+              lcd.print("     NO FIRE    "); 
+              fireStatusCounter=0;          
+              delay(3000);
+            }
+            Serial.println("No Fire");  
+            showAlert();
       }
   
 }
@@ -56,7 +68,7 @@ void detectRain(){
       int rain_mapped= map(rainReading, MIN, MAX, 0, 3);
       lcd.clear();
       lcd.setCursor(0,0);
-      Serial.print("Rain possiblility "); Serial.print((rainMax-rain_mapped));     
+      Serial.print("Rain possiblility "); Serial.println((MAX-rain_mapped));     
        switch (rain_mapped) { 
          case 0:    lcd.print("......HEAVY....."); lcd.setCursor(0,1); lcd.print("......RAIN......"); showAlert(); break;
          case 1:    lcd.print("......MIGHT....."); lcd.setCursor(0,1); lcd.print("......RAIN......"); showAlert(); break;
