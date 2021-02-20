@@ -62,7 +62,8 @@ void checkTemp(){
     DHT.read11(dht_in);  
     lcd.createChar(3,degree);
     lcd.clear();
-    lcd.setCursor(0,0); lcd.print("TEMP "); lcd.print(DHT.temperature); lcd.write(3); lcd.print("C");
+    lcd.setCursor(0,0); lcd.print("TEMP ="); lcd.print(DHT.temperature); lcd.write(3); lcd.print("C");
+    lcd.setCursor(0,1); lcd.print("Humidity  ="); lcd.print(DHT.humidity); lcd.print(" %");
     
     Serial.print("Temperature ");
     Serial.print(DHT.temperature); 
