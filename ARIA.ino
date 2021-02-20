@@ -51,7 +51,7 @@ void detectRain(){
             Serial.println("Not Raining");
             break;
         }
-  delay(1000);
+    delay(1000);
       
       
   
@@ -62,18 +62,13 @@ void checkTemp(){
     DHT.read11(dht_in);  
     lcd.createChar(3,degree);
     lcd.clear();
-    lcd.setCursor(0,0); lcd.print("TEMP ="); lcd.print(DHT.temperature); lcd.write(3); lcd.print("C");
-    lcd.setCursor(0,1); lcd.print("Humidity  ="); lcd.print(DHT.humidity); lcd.print(" %");
+    lcd.setCursor(0,0); lcd.print("TEMP   ="); lcd.print(DHT.temperature); lcd.write(3); lcd.print("C");
+    lcd.setCursor(0,1); lcd.print("HUMID  ="); lcd.print(DHT.humidity); lcd.print(" %");
     
-    Serial.print("Temperature ");
-    Serial.print(DHT.temperature); 
-    Serial.println("C  ");
-      
-    Serial.print("Temp = ");
-    Serial.print(DHT.humidity);
-    Serial.print("%  ");
+    Serial.print("Temperature ");    Serial.print(DHT.temperature);     Serial.println("C  ");      
+    Serial.print("Humidity = ");    Serial.print(DHT.humidity);    Serial.print("%  ");
     
-    delay(5000);//Wait 5
+    delay(5000);
   }
 
 
