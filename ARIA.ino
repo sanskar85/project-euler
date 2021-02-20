@@ -1,14 +1,14 @@
 #include <LiquidCrystal.h>
 #include <Adafruit_Sensor.h>
 #include "dht.h"
-#define dht_apin A0 
+#define dht_in A0 
 
 dht DHT;
 
 
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
-int rain_detect_in=A0;
-int soil_moisture_in=A1;
+int rain_detect_in=A1;
+int soil_moisture_in=A2;
 int soil_moisture_value;
 int soil_moisture_limit=300;
 int alert = 13;
@@ -20,6 +20,8 @@ const int rainMax = 1024;
 byte heart[] = {  B00000,  B01010,  B11111,  B11111,  B11111,  B01110,  B00100,  B00000 };
 
 byte smiley[] = {  B00000,  B00000,  B01010,  B00000,  B00000,  B10001,  B01110,  B00000  };
+
+byte degree[] = {  B00000,  B00011,  B00011,  B00000,  B00000,  B00000,  B00000,  B00000  };
 
 void setup() {
   pinMode(alert,OUTPUT);
@@ -57,14 +59,17 @@ void detectRain(){
   }
 
 void checkTemp(){
-     DHT.read11(dht_apin);
+    DHT.read11(dht_in);  
+    lcd.clear();
+    lcd.setCursor(0,0); lcd.print("TEMP "); lcd.print(DHT.temperature) lcd.write(3);
     
-    Serial.print("Current humidity = ");
-    Serial.print(DHT.humidity);
-    Serial.print("%  ");
-    Serial.print("temperature = ");
+    Serial.print("Temperature ");
     Serial.print(DHT.temperature); 
     Serial.println("C  ");
+      
+    Serial.print("Temp = ");
+    Serial.print(DHT.humidity);
+    Serial.print("%  ");
     
     delay(5000);//Wait 5
   }
@@ -84,6 +89,7 @@ void showError(){
 void printStartingStatement(){  
    lcd.createChar(1,smiley);
    lcd.createChar(2,heart);
+   lcd.createChar(3,degree);
   lcd.noCursor();
   lcd.setCursor(0,0);  lcd.print("^^^Welcome TO^^^");  lcd.setCursor(0,1);  lcd.print("******ARIA******");
   delay(1000);  
