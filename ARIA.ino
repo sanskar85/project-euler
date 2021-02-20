@@ -15,12 +15,14 @@ int fire_detect_in=6; //Fire sensor input pin
 
 const int MIN = 0;     // sensor minimum
 const int MAX = 1024;
-const int fireStatusDelay=10;
+const int smokeThreshold = 600;
+const int delayCount=10;
 int fireStatusCounter=0;
+int smokeStatusCounter=0;
 
 
 // custom characters generated for matrix display we are using
-byte heart[] = {  B00000,  B01010,  B11111,  B11111,  B11111,  B01110,  B00100,  B00000 };
+byte heart[] =  {  B00000,  B01010,  B11111,  B11111,  B11111,  B01110,  B00100,  B00000  };
 
 byte smiley[] = {  B00000,  B00000,  B01010,  B00000,  B00000,  B10001,  B01110,  B00000  };
 
@@ -46,31 +48,38 @@ void loop(){
 }// end loop()
 
 void detectSmoke(){
-  int analogSensor = analogRead(smoke_detect_in);
-  Serial.print("Smoke sensor value");  Serial.println(analogSensor);
- 
-  
-  
+    int smokeValue = analogRead(smoke_detect_in);
+    Serial.print("Smoke sensor value");  Serial.println(smokeValue);
+    if( smokeValue>smokeThreshold){
+        lcd.clear();
+        lcd.setCursor(0,0);      lcd.print("....BE ALERT....");  lcd.setCursor(0,1); lcd.print(".SMOKE DETECTED.");
+        Serial.println("Fire ALert");
+    }else if(smokeStatusCounter++>delayCount){
+        lcd.clear();
+        lcd.setCursor(0,0);      lcd.print("....NO SMOKE....");  lcd.setCursor(0,1); lcd.print("....DETECTED....");
+        smokeStatusCounter=0;
+    } 
 }
 
 void detectFire(){
       int Flame = digitalRead(fire_detect_in);
-      lcd.clear();
-      lcd.setCursor(0,0);
-       if (Flame== HIGH){
+       if (Flame== LOW){
+          lcd.clear();
+          lcd.setCursor(0,0);
           lcd.print("!!!!! FIRE !!!!!"); lcd.setCursor(0,1);  lcd.print("!!!!! ALERT !!!!");
           Serial.println("Fire!!!");  
           showAlert();
           delay(3000);
       }
       else {
-            if(fireStatusCounter++>fireStatusDelay){
+            if(fireStatusCounter++>delayCount){
+              lcd.clear();
+              lcd.setCursor(0,0); 
               lcd.print("     NO FIRE    "); 
               fireStatusCounter=0;          
               delay(3000);
             }
             Serial.println("No Fire");  
-            showAlert();
       }
   
 }
@@ -96,8 +105,8 @@ void checkTemp(){
     lcd.setCursor(0,0); lcd.print("TEMP   = "); lcd.print(DHT.temperature); lcd.write(3); lcd.print("C");
     lcd.setCursor(0,1); lcd.print("HUMID  = "); lcd.print(DHT.humidity); lcd.print(" %");
     
-    Serial.print("Temperature ");    Serial.print(DHT.temperature);     Serial.println("C  ");      
-    Serial.print("Humidity = ");    Serial.print(DHT.humidity);    Serial.print("%  ");
+    Serial.print("Temperature = ");    Serial.print(DHT.temperature);     Serial.println("C  ");      
+    Serial.print("Humidity    = ");    Serial.print(DHT.humidity);    Serial.println(" %");
     
     delay(3000);
   }
