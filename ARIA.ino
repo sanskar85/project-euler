@@ -60,8 +60,9 @@ void detectRain(){
 
 void checkTemp(){
     DHT.read11(dht_in);  
+    lcd.createChar(3,degree);
     lcd.clear();
-    lcd.setCursor(0,0); lcd.print("TEMP "); lcd.print(DHT.temperature) lcd.write(3);
+    lcd.setCursor(0,0); lcd.print("TEMP "); lcd.print(DHT.temperature); lcd.write(3); lcd.print("C");
     
     Serial.print("Temperature ");
     Serial.print(DHT.temperature); 
@@ -89,7 +90,6 @@ void showError(){
 void printStartingStatement(){  
    lcd.createChar(1,smiley);
    lcd.createChar(2,heart);
-   lcd.createChar(3,degree);
   lcd.noCursor();
   lcd.setCursor(0,0);  lcd.print("^^^Welcome TO^^^");  lcd.setCursor(0,1);  lcd.print("******ARIA******");
   delay(1000);  
