@@ -8,7 +8,8 @@ dht DHT;
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 int alert = 13;     // for alert output pin
 int rain_detect_in=A1; //Rain sensor input pin
-int smoke_detect_in=A2; //Rain sensor input pin
+int smoke_detect_in=A2; //Smoke sensor input pin
+int soil_moist_detect_in=A3; //Moisture sensor input pin
 int fire_detect_in=6; //Fire sensor input pin
 
 
@@ -33,6 +34,7 @@ void setup() {
   pinMode(dht_in,INPUT);
   pinMode(fire_detect_in,INPUT);
   pinMode(smoke_detect_in,INPUT);
+  pinMode(soil_moist_detect_in,INPUT);
   Serial.begin(9600);
   lcd.begin(16,2);
   printStartingStatement();
@@ -45,8 +47,15 @@ void loop(){
   detectRain();
   detectFire();
   detectSmoke();
+  detectMoisture();
 }// end loop()
 
+void detectMoisture(){
+    int moisture=analogRead(soil_moist_detect_in);
+    Serial.print("Moisture Value : "); Serial.println(sensorValue);
+    
+    
+}
 void detectSmoke(){
     int smokeValue = analogRead(smoke_detect_in);
     Serial.print("Smoke sensor value");  Serial.println(smokeValue);
