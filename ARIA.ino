@@ -43,6 +43,8 @@ void loop(){
 void detectRain(){
       int rainReading = analogRead(rain_detect_in);
       int rain_mapped= map(rainReading, rainMin, rainMax, 0, 3);
+            Serial.println(rain_mapped);
+      
        switch (rain_mapped) { 
          case 0:    
             Serial.println("Rain Warning");
