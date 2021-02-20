@@ -1,16 +1,21 @@
 #include <LiquidCrystal.h>
-#include <dht.h>
+#include <Adafruit_Sensor.h>
+#include <DHT.h>
 
-
-#define dht_pin A0
-dht DHT;
+#define DHTTYPE DHT11   
+#define DHTPIN 6
+DHT dht = DHT(DHTPIN, DHTTYPE);
+ 
 
 
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
-int soil_moisture_in=A0;
+int rain_detect_in=A0;
+int soil_moisture_in=A1;
 int soil_moisture_value;
 int soil_moisture_limit=300;
 int alert = 13;
+const int rainMin = 0;     // sensor minimum
+const int rainMax = 1024;
 
 
 // custom characters generated for matrix display we are using
@@ -23,24 +28,73 @@ void setup() {
   Serial.begin(9600);
   lcd.begin(16,2);
   
+  delay(1000);//Wait before accessing Sensor
+  
  // printStartingStatement();
   
 
 }
 
-void loop() {
-  DHT.read11(dht_pin);
+void loop(){
+  checkTemp();
+  //detectRain();
+}// end loop()
+
+void detectRain(){
+      int rainReading = analogRead(rain_detect_in);
+      int rain_mapped= map(sensorReading, sensorMin, sensorMax, 0, 3);
+       switch (range) { 
+         case 0:    
+            Serial.println("Rain Warning");
+            break;
+         case 1:    
+            Serial.println("Not Raining");
+            break;
+        }
+  delay(1000);
+      
+      
   
-    Serial.print("Current humidity = ");
-    Serial.print(DHT.humidity);
-    Serial.print("%  ");
-    Serial.print("temperature = ");
-    Serial.print(DHT.temperature); 
-    Serial.println("C  ");
-    
-    delay(5000);
   
-}
+  }
+
+void checkTemp(){
+  
+float h = dht.readHumidity();
+  // Read the temperature as Celsius:
+  float t = dht.readTemperature();
+  // Read the temperature as Fahrenheit:
+  float f = dht.readTemperature(true);
+  // Check if any reads failed and exit early (to try again):
+  if (isnan(h) || isnan(t) || isnan(f)) {
+    Serial.println("Failed to read from DHT sensor!");
+    return;
+  }
+  // Compute heat index in Fahrenheit (default):
+  float hif = dht.computeHeatIndex(f, h);
+  // Compute heat index in Celsius:
+  float hic = dht.computeHeatIndex(t, h, false);
+  Serial.print("Humidity: ");
+  Serial.print(h);
+  Serial.print(" % ");
+  Serial.print("Temperature: ");
+  Serial.print(t);
+  Serial.print(" \xC2\xB0");
+  Serial.print("C | ");
+  Serial.print(f);
+  Serial.print(" \xC2\xB0");
+  Serial.print("F ");
+  Serial.print("Heat index: ");
+  Serial.print(hic);
+  Serial.print(" \xC2\xB0");
+  Serial.print("C | ");
+  Serial.print(hif);
+  Serial.print(" \xC2\xB0");
+  Serial.println("F");
+  }
+
+
+
 
 void showError(){  
     for(int i=0;i<3;i++){
