@@ -1,11 +1,9 @@
 #include <LiquidCrystal.h>
 #include <Adafruit_Sensor.h>
-#include <DHT.h>
+#include "dht.h"
+#define dht_apin A0 
 
-#define DHTTYPE DHT11   
-#define DHTPIN 6
-DHT dht = DHT(DHTPIN, DHTTYPE);
- 
+dht DHT;
 
 
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
@@ -28,7 +26,7 @@ void setup() {
   Serial.begin(9600);
   lcd.begin(16,2);
   
-  delay(1000);//Wait before accessing Sensor
+  delay(2000);//Wait before accessing Sensor
   
  // printStartingStatement();
   
@@ -42,8 +40,8 @@ void loop(){
 
 void detectRain(){
       int rainReading = analogRead(rain_detect_in);
-      int rain_mapped= map(sensorReading, sensorMin, sensorMax, 0, 3);
-       switch (range) { 
+      int rain_mapped= map(rainReading, rainMin, rainMax, 0, 3);
+       switch (rain_mapped) { 
          case 0:    
             Serial.println("Rain Warning");
             break;
@@ -59,38 +57,16 @@ void detectRain(){
   }
 
 void checkTemp(){
-  
-float h = dht.readHumidity();
-  // Read the temperature as Celsius:
-  float t = dht.readTemperature();
-  // Read the temperature as Fahrenheit:
-  float f = dht.readTemperature(true);
-  // Check if any reads failed and exit early (to try again):
-  if (isnan(h) || isnan(t) || isnan(f)) {
-    Serial.println("Failed to read from DHT sensor!");
-    return;
-  }
-  // Compute heat index in Fahrenheit (default):
-  float hif = dht.computeHeatIndex(f, h);
-  // Compute heat index in Celsius:
-  float hic = dht.computeHeatIndex(t, h, false);
-  Serial.print("Humidity: ");
-  Serial.print(h);
-  Serial.print(" % ");
-  Serial.print("Temperature: ");
-  Serial.print(t);
-  Serial.print(" \xC2\xB0");
-  Serial.print("C | ");
-  Serial.print(f);
-  Serial.print(" \xC2\xB0");
-  Serial.print("F ");
-  Serial.print("Heat index: ");
-  Serial.print(hic);
-  Serial.print(" \xC2\xB0");
-  Serial.print("C | ");
-  Serial.print(hif);
-  Serial.print(" \xC2\xB0");
-  Serial.println("F");
+     DHT.read11(dht_apin);
+    
+    Serial.print("Current humidity = ");
+    Serial.print(DHT.humidity);
+    Serial.print("%  ");
+    Serial.print("temperature = ");
+    Serial.print(DHT.temperature); 
+    Serial.println("C  ");
+    
+    delay(5000);//Wait 5
   }
 
 
