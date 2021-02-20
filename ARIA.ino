@@ -17,6 +17,7 @@ int fire_detect_in=6; //Fire sensor input pin
 const int MIN = 0;     // sensor minimum
 const int MAX = 1024;
 const int smokeThreshold = 600;
+const int moistureThreshold = 500;
 const int delayCount=10;
 int fireStatusCounter=0;
 int smokeStatusCounter=0;
@@ -52,7 +53,24 @@ void loop(){
 
 void detectMoisture(){
     int moisture=analogRead(soil_moist_detect_in);
-    Serial.print("Moisture Value : "); Serial.println(sensorValue);
+    Serial.print("Moisture Value : "); Serial.println(moisture);    
+    lcd.clear();
+    lcd.setCursor(0,0);  
+    if(moisture>950){    lcd.print(".PLEASE INSTALL.");  lcd.setCursor(0,1); lcd.print("DEVICE PROPERLY.");
+        Serial.println("SOIL MOISTURE SENSOR NOT PLANTED");        
+    }else if(moisture>moistureThreshold){
+        lcd.print("MOISTURE TOO");  
+        lcd.setCursor(0,1); lcd.print(" LOW "); lcd.setCursor(12,1); lcd.print(String((MAX-moisture)/10));
+        Serial.println("Soil moisture too low");        
+    }else{
+        lcd.print("MOISTURE");  
+        lcd.setCursor(0,1); lcd.print("PERFECT"); lcd.setCursor(12,1); lcd.print(String((MAX-moisture)/10));
+        Serial.println("Soil moisture too low");  
+    }
+
+
+
+    delay(3000);
     
     
 }
