@@ -36,24 +36,22 @@ void setup() {
 }
 
 void loop(){
-  checkTemp();
-  //detectRain();
+  //checkTemp();
+  detectRain();
 }// end loop()
 
 void detectRain(){
       int rainReading = analogRead(rain_detect_in);
       int rain_mapped= map(rainReading, rainMin, rainMax, 0, 3);
-            Serial.println(rain_mapped);
-      
+      lcd.clear();
+      lcd.setCursor(0,0);
+      Serial.println("Rain possiblility "+(rainMax-rain_mapped));      
        switch (rain_mapped) { 
-         case 0:    
-            Serial.println("Rain Warning");
-            break;
-         case 1:    
-            Serial.println("Not Raining");
-            break;
+         case 0:     lcd.print("......HEAVY....." ); lcd.setCursor(0,1); lcd.print(".....RAIN....." ); break;
+         case 1:    lcd.print("......MIGHT....." ); lcd.setCursor(0,1); lcd.print(".....RAIN....." ); break;
+         case 2:    lcd.print("......NOT......" ); lcd.setCursor(0,1); lcd.print("...RAINING...." );  break;
         }
-    delay(1000);
+    delay(3000);
       
       
   
@@ -70,7 +68,7 @@ void checkTemp(){
     Serial.print("Temperature ");    Serial.print(DHT.temperature);     Serial.println("C  ");      
     Serial.print("Humidity = ");    Serial.print(DHT.humidity);    Serial.print("%  ");
     
-    delay(5000);
+    delay(3000);
   }
 
 
