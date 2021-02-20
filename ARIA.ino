@@ -14,13 +14,10 @@ const int fire_detect_in=6; //Fire sensor input pin
 
 
 
-const int MIN = 0;     // sensor minimum
-const int MAX = 1024;
-const int smokeThreshold = 600;
-const int moistureThreshold = 650;
-const int delayCount=10;
-int fireStatusCounter=0;
-int smokeStatusCounter=0;
+const int MIN = 0;                  // MINIMUM VALUE OF SENSORS
+const int MAX = 1024;               // MAXIMUM VALUE OF SENSORS
+const int smokeThreshold = 800;     // MINIMUM VALUE FOR SMOKE DETECTION
+const int moistureThreshold = 450;  // MINIMUM VALUE OF SOIL MOISTURE TO BE PERFECT
 
 
 // custom characters generated for matrix display we are using
@@ -31,6 +28,8 @@ byte smiley[] = {  B00000,  B00000,  B01010,  B00000,  B00000,  B10001,  B01110,
 byte degree[] = {  B00000,  B00110,  B00110,  B00000,  B00000,  B00000,  B00000,  B00000  };
 
 void setup() {
+
+  //here input / output of pins are declared
   pinMode(alert,OUTPUT);
   pinMode(dht_in,INPUT);
   pinMode(fire_detect_in,INPUT);
@@ -39,11 +38,10 @@ void setup() {
   Serial.begin(9600);
   lcd.begin(16,2);
   printStartingStatement();
-  
-
 }
 
 void loop(){
+  // gathering values and showing messages
   checkTemp();
   detectRain();
   detectFire();
@@ -56,21 +54,20 @@ void detectMoisture(){
     Serial.print("Moisture Value : "); Serial.println(moisture);    
     lcd.clear();
     lcd.setCursor(0,0);  
-    if(moisture>900){    lcd.print(".PLEASE INSTALL.");  lcd.setCursor(0,1); lcd.print("DEVICE PROPERLY.");
+    if(moisture==MAX){    lcd.print(".PLEASE INSTALL.");  lcd.setCursor(0,1); lcd.print("DEVICE PROPERLY.");  
+    showAlert();
         Serial.println("SOIL MOISTURE SENSOR NOT PLANTED");        
     }else if(moisture>moistureThreshold){
         lcd.print("MOISTURE TOO");  
-        lcd.setCursor(0,1); lcd.print(" LOW "); lcd.setCursor(12,1); lcd.print(String((MAX-moisture)/10));
+        lcd.setCursor(0,1); lcd.print(" LOW "); lcd.setCursor(12,1); lcd.print(String((MAX-moisture)/10));    
+        showAlert();
         Serial.println("Soil moisture too low");        
     }else{
         lcd.print("MOISTURE");  
         lcd.setCursor(0,1); lcd.print("PERFECT"); lcd.setCursor(12,1); lcd.print(String((MAX-moisture)/10)+String("%"));
         Serial.println("Soil moisture Perfect");  
     }
-
-
-
-    delay(3000);
+   delay(3000);
     
     
 }
@@ -79,12 +76,12 @@ void detectSmoke(){
     Serial.print("Smoke sensor value");  Serial.println(smokeValue);
     if( smokeValue>smokeThreshold){
         lcd.clear();
-        lcd.setCursor(0,0);      lcd.print("....BE ALERT....");  lcd.setCursor(0,1); lcd.print(".SMOKE DETECTED.");
+        lcd.setCursor(0,0);      lcd.print("....BE ALERT....");  lcd.setCursor(0,1); lcd.print(".SMOKE DETECTED."); s
+        howAlert();
         Serial.println("Fire ALert");
-    }else if(smokeStatusCounter++>delayCount){
+    }else{
         lcd.clear();
         lcd.setCursor(0,0);      lcd.print("....NO SMOKE....");  lcd.setCursor(0,1); lcd.print("....DETECTED....");
-        smokeStatusCounter=0;
     } 
 }
 
@@ -99,14 +96,12 @@ void detectFire(){
           delay(3000);
       }
       else {
-            if(fireStatusCounter++>delayCount){
-              lcd.clear();
-              lcd.setCursor(0,0); 
-              lcd.print("     NO FIRE    "); 
-              fireStatusCounter=0;          
-              delay(3000);
-            }
-            Serial.println("No Fire");  
+            
+          lcd.clear();
+          lcd.setCursor(0,0); 
+          lcd.print("     NO FIRE    ");       
+          delay(3000);
+          Serial.println("No Fire");  
       }
   
 }
