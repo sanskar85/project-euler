@@ -1,0 +1,54 @@
+package april_cookoff;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
+
+public class Chocolate_Monger_Array {
+
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		int t=scanner.nextInt();
+		while(t-->0) {
+			int n = scanner.nextInt();
+			int x = scanner.nextInt();
+			int[] arr = new int[n];
+			int j=0;
+			for (int i = 0; i < n; i++) {
+				int num = scanner.nextInt();
+				if(isInArray(arr,num)) {
+					x--;
+				}else {
+					arr[j]=num;
+					j++;
+				}
+			}
+			int elements = elementsInArray(arr);
+			if(x>0) {
+				elements-=x;
+			}
+			System.out.println(elements);
+		}
+
+	}
+
+	private static int elementsInArray(int[] arr) {
+		int i=0;
+		for(i = 0; i<arr.length;i++) {
+			if(arr[i]==0) break;
+		}
+		return i;
+	}
+
+	private static boolean isInArray(int[] arr, int num) {
+		for(int i = 0 ; i< arr.length; i++) {
+			if(arr[i]==num)return true;
+		}
+		return false;
+	}
+
+}
